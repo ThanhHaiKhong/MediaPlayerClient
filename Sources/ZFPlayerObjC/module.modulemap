@@ -1,0 +1,4 @@
+module ZFPlayerObjC [system] {
+    header "ZFPlayer.h"
+    export *
+}
