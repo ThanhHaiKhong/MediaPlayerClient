@@ -455,7 +455,14 @@
 #pragma mark: - Equalizer
 
 - (void)setEqualizerValue:(float)value forBand:(NSInteger)bandTag {
-    
+	NSArray *listEQ = @[@"32", @"64", @"125", @"250", @"500", @"1000", @"2000", @"4000", @"8000", @"16000"];
+	if (bandTag < 0 || bandTag >= listEQ.count) {
+		return;
+	}
+	
+	float frequency = [listEQ[bandTag] floatValue];
+    NSString *eqFilter = [NSString stringWithFormat:@"equalizer=f=%f:width_type=o:width=1.5:g=%f", frequency, value];
+	[self.player setOptionValue:eqFilter forKey:@"af" ofCategory:kIJKFFOptionCategoryPlayer];
 }
 
 - (NSArray *)listEQ {

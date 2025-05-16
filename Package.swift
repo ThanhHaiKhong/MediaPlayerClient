@@ -27,21 +27,13 @@ let package = Package(
             dependencies: [
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 "MediaPlayerClient",
-                "ZFPlayerObjC",
+				"MobileVLCKit"
             ]
         ),
-        .target(
-            name: "ZFPlayerObjC",
-            dependencies: [
-                "IJKMediaFramework"
-            ],
-            path: "Sources/ZFPlayerObjC",
-            publicHeadersPath: "."
-        ),
 		.binaryTarget(
-			name: "IJKMediaFramework",
-			url: "https://github.com/ThanhHaiKhong/IJKMediaFramework/releases/download/v1.0.0/IJKMediaFramework.xcframework.zip",
-			checksum: "8c5d56b56fbc8041d5a4cc36d6fd08b52b0c742f7da6da8d13182d25876b00b4"
+			name: "MobileVLCKit",
+			url: "https://github.com/ThanhHaiKhong/MobileVLCKit/releases/download/1.0.0/MobileVLCKit.xcframework.zip",
+			checksum: "d46e72c0da171bc3cc52ecea294d8be641332d078f927cbc51cc62df6d0eddd9"
 		)
     ]
 )
@@ -51,3 +43,19 @@ extension Product {
         .library(name: name, targets: [name])
     }
 }
+
+/*
+ .target(
+ name: "ZFPlayerObjC",
+ dependencies: [
+ "IJKMediaFramework"
+ ],
+ path: "Sources/ZFPlayerObjC",
+ publicHeadersPath: "."
+ ),
+ .binaryTarget(
+ name: "IJKMediaFramework",
+ url: "https://github.com/ThanhHaiKhong/IJKMediaFramework/releases/download/v1.0.0/IJKMediaFramework.xcframework.zip",
+ checksum: "8c5d56b56fbc8041d5a4cc36d6fd08b52b0c742f7da6da8d13182d25876b00b4"
+ ),
+ */

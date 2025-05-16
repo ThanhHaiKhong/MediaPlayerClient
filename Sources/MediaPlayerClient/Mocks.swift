@@ -64,7 +64,7 @@ extension MediaPlayerClient: TestDependencyKey {
 			isEqualizerEnabled: {
 				return false
 			},
-            setEnableEqualizer: { _ in
+            setEnableEqualizer: { _, _ in
                 
             },
             setListEQ: { _ in
@@ -72,7 +72,10 @@ extension MediaPlayerClient: TestDependencyKey {
             },
             setEqualizer: { _, _ in
                 
-            }
+            },
+			setEqualizerWith: { _ in
+				
+			},
         )
     }
 }

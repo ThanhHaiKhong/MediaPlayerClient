@@ -1,10 +1,10 @@
 //
-//  MediaPlayerActor.swift
+//  ZFPlayerActor.swift
 //  MediaPlayerClient
 //
 //  Created by Thanh Hai Khong on 21/4/25.
 //
-
+/*
 import MediaPlayerClient
 import ZFPlayerObjC
 import AVFoundation
@@ -12,7 +12,7 @@ import Foundation
 import UIKit
 
 @MainActor
-final internal class MediaPlayerActor: Sendable {
+final internal class ZFPlayerActor: Sendable {
     
     // MARK: - Properties
     
@@ -40,18 +40,18 @@ final internal class MediaPlayerActor: Sendable {
     
     // MARK: - Public Methods
     
-    func initialize(containerView: UIView, playMode: MediaPlayerClient.PlayMode?) async throws {
+    func initialize(containerView: UIView, playMode: MediaPlayerClient.PlayMode?) async {
         self.containerView = containerView
         let effectivePlayMode = playMode ?? self.playMode
         self.playMode = effectivePlayMode
-        try setupPlayer(containerView: containerView, playMode: effectivePlayMode)
+        setupPlayer(containerView: containerView, playMode: effectivePlayMode)
     }
     
-    private func setupPlayer(containerView: UIView, playMode: MediaPlayerClient.PlayMode) throws {
+    private func setupPlayer(containerView: UIView, playMode: MediaPlayerClient.PlayMode) {
         let playerManager: ZFPlayerMediaPlayback
         switch playMode {
         case .audioOnly:
-            playerManager = videoManager
+            playerManager = audioManager
         case .video:
             playerManager = videoManager
         }
@@ -270,8 +270,14 @@ final internal class MediaPlayerActor: Sendable {
     
     func setEqualizer(_ value: Float, _ bandIndex: Int) async throws {
         guard let player else { throw MediaPlayerClient.PlayerError.notInitialized }
-        if let playerManager = player.currentPlayerManager as? ZFAVPlayerManager {
-			playerManager.setEqualizerValue(value, forBand: bandIndex)
+		
+        if let videoManager = player.currentPlayerManager as? ZFAVPlayerManager {
+			videoManager.setEqualizerValue(value, forBand: bandIndex)
         }
+		
+		if let audioManager = player.currentPlayerManager as? ZFIJKPlayerManager {
+			audioManager.setEqualizerValue(value, forBand: bandIndex)
+		}
     }
 }
+*/

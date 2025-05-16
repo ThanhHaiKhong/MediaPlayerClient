@@ -7,74 +7,64 @@
 
 import ComposableArchitecture
 import MediaPlayerClient
+import Foundation
 
 extension MediaPlayerClient: DependencyKey {
     public static let liveValue: MediaPlayerClient = {
-        let actor = MediaPlayerActor()
-        
+		let vlcActor = VLCActor()
+		
         return MediaPlayerClient(
             initialize: { view, playMode in
-                try await actor.initialize(containerView: view, playMode: playMode)
+				await vlcActor.initialize(containerView: view, playMode: playMode)
             },
             setTrack: { url in
-                try await actor.setTrack(url: url)
+				try await vlcActor.setTrack(url: url)
             },
             currentRate: {
-                try await actor.currentRate()
+                try await vlcActor.currentRate()
             },
             setPlaybackRate : { rate in
-                try await actor.setPlaybackRate(rate)
+                try await vlcActor.setPlaybackRate(rate)
             },
             play: {
-                try await actor.play()
+                try await vlcActor.play()
             },
             pause: {
-                try await actor.pause()
+                try await vlcActor.pause()
             },
             stop: {
-                try await actor.stop()
+                try await vlcActor.stop()
             },
             seek: { time in
-                try await actor.seek(to: time)
+                try await vlcActor.seek(to: time)
             },
             switchMode: { playMode in
-                try await actor.switchMode(to: playMode)
+                try await vlcActor.switchMode(to: playMode)
             },
             currentTime: {
-                AsyncStream { continuation in
-                    Task { @MainActor in
-                        for await value in actor.currentTimeStream() {
-                            continuation.yield(value)
-                        }
-                        continuation.finish()
-                    }
-                }
+				await vlcActor.currentTimeStream()
             },
             duration: {
-                try await actor.duration()
+				try await vlcActor.duration()
             },
             events: {
-                AsyncStream { continuation in
-                    Task { @MainActor in
-                        for await value in actor.eventStream() {
-                            continuation.yield(value)
-                        }
-                        continuation.finish()
-                    }
-                }
+				await vlcActor.eventStream()
             },
 			isEqualizerEnabled: {
-				await actor.isEqualizerEnabled()
+				await vlcActor.isEqualizerEnabled()
 			},
-            setEnableEqualizer: { enable in
-                try await actor.setEnableEqualizer(enable)
+            setEnableEqualizer: { isEnabled, initialListEQ in
+                try await vlcActor.setEnableEqualizer(isEnabled, initialListEQ)
             },
             setListEQ: { listEQ in
-                try await actor.setListEQ(listEQ)
+                try await vlcActor.setListEQ(listEQ)
             },
             setEqualizer: { value, bandIndex in
-                try await actor.setEqualizer(value, bandIndex)
-            }
+                try await vlcActor.setEqualizer(value, bandIndex)
+            },
+			setEqualizerWith: { preset in
+				try await vlcActor.setEqualizerWith(preset)
+			},
         )
     }()
 }

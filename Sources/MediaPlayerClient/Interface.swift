@@ -7,7 +7,7 @@ import UIKit
 
 @DependencyClient
 public struct MediaPlayerClient: Sendable {
-    public var initialize: @Sendable (_ containerView: UIView, _ playMode: PlayMode?) async throws -> Void
+    public var initialize: @Sendable (_ containerView: UIView, _ playMode: PlayMode?) async -> Void
     
     public var setTrack: @Sendable (_ url: URL) async throws -> Void
     
@@ -25,13 +25,13 @@ public struct MediaPlayerClient: Sendable {
     
     public var switchMode: @Sendable (_ playMode: PlayMode) async throws -> Void
     
-    public var currentTime: @Sendable () -> AsyncStream<TimeRecord> = {
+    public var currentTime: @Sendable () async -> AsyncStream<TimeRecord> = {
         AsyncStream { _ in }
     }
     
     public var duration: @Sendable () async throws -> TimeInterval
     
-    public var events: @Sendable () -> AsyncStream<PlaybackEvent> = {
+    public var events: @Sendable () async -> AsyncStream<PlaybackEvent> = {
         AsyncStream { _ in
             
         }
@@ -41,9 +41,11 @@ public struct MediaPlayerClient: Sendable {
 		false
 	}
     
-    public var setEnableEqualizer: @Sendable (_ enabled: Bool) async throws -> Void
+    public var setEnableEqualizer: @Sendable (_ enabled: Bool, _ initialListEQ: [Float]) async throws -> Void
     
     public var setListEQ: @Sendable (_ listEQ: [Float]) async throws -> Void
     
     public var setEqualizer: @Sendable (_ value: Float, _ bandIndex: Int) async throws -> Void
+	
+	public var setEqualizerWith: @Sendable (_ preset: MediaPlayerClient.AudioEqualizer.Preset) async throws -> Void
 }
