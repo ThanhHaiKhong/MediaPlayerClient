@@ -20,62 +20,6 @@ extension MediaPlayerClient: TestDependencyKey {
     }
     
     public static var previewValue: MediaPlayerClient {
-        return MediaPlayerClient(
-            initialize: { _, _ in
-                
-            },
-            setTrack: { _ in
-                
-            },
-            currentRate: {
-                return Float(1.0)
-            },
-            setPlaybackRate: { _ in
-                
-            },
-            play: {
-                
-            },
-            pause: {
-                
-            },
-            stop: {
-                
-            },
-            seek: { _ in
-                
-            },
-            switchMode: { _ in
-                
-            },
-            currentTime: {
-                AsyncStream { continuation in
-                    
-                }
-            },
-            duration: {
-                return 0
-            },
-            events: {
-                AsyncStream { continuation in
-                    
-                }
-            },
-			isEqualizerEnabled: {
-				return false
-			},
-            setEnableEqualizer: { _, _ in
-                
-            },
-            setListEQ: { _ in
-                
-            },
-            setEqualizer: { _, _ in
-                
-            },
-			setEqualizerWith: { _ in
-				
-			},
-        )
+        return MediaPlayerClient()
     }
 }

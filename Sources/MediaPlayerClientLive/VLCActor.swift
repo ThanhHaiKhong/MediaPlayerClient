@@ -82,6 +82,14 @@ actor VLCActor: Sendable {
 	func setEqualizerWith(_ preset: MediaPlayerClient.AudioEqualizer.Preset) async throws {
 		try await player.setEqualizer(preset)
 	}
+	
+	func currentListEQ() async -> [Float] {
+		await player.currentListEQ()
+	}
+	
+	func isPlaying() async -> Bool {
+		await player.isPlaying()
+	}
 }
 
 final private class VLCPlayer: NSObject, @unchecked Sendable {
@@ -93,6 +101,7 @@ final private class VLCPlayer: NSObject, @unchecked Sendable {
 	private var hasNotifiedDuration = false
 	private let audioEqualizer = VLCAudioEqualizer()
 	private var lastUpdateTime: TimeInterval = .zero
+	private var listEQ: [Float] = Array(repeating: 0.0, count: 10)
 	
 	private var eventContinuation: AsyncStream<MediaPlayerClient.PlaybackEvent>.Continuation?
 	private var timeContinuation: AsyncStream<MediaPlayerClient.TimeRecord>.Continuation?
@@ -211,6 +220,8 @@ final private class VLCPlayer: NSObject, @unchecked Sendable {
 	}
 	
 	func setListEQ(_ listEQ: [Float]) async throws {
+		self.listEQ = listEQ
+		
 		guard isEnabledEqualizer else {
 			throw MediaPlayerClient.PlayerError.equalizerNotEnabled
 		}
@@ -233,6 +244,9 @@ final private class VLCPlayer: NSObject, @unchecked Sendable {
 			throw MediaPlayerClient.PlayerError.invalidEqualizerBandIndex
 		}
 		audioEqualizer.bands[bandIndex].amplification = value
+		if listEQ.count > bandIndex {
+			listEQ[bandIndex] = value
+		}
 	}
 	
 	func setEqualizer(_ preset: MediaPlayerClient.AudioEqualizer.Preset) async throws {
@@ -246,6 +260,16 @@ final private class VLCPlayer: NSObject, @unchecked Sendable {
 		for band in audioEqualizer.bands {
 			band.amplification = mediaEqualizer.bands[Int(band.index)].amplification
 		}
+		
+		self.listEQ = mediaEqualizer.bands.map { $0.amplification }
+	}
+	
+	func currentListEQ() async -> [Float] {
+		listEQ
+	}
+	
+	func isPlaying() async -> Bool {
+		player.isPlaying
 	}
 }
 

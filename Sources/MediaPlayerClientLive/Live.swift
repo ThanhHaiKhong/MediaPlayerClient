@@ -20,6 +20,9 @@ extension MediaPlayerClient: DependencyKey {
             setTrack: { url in
 				try await vlcActor.setTrack(url: url)
             },
+			isPlaying: {
+				await vlcActor.isPlaying()
+			},
             currentRate: {
                 try await vlcActor.currentRate()
             },
@@ -53,6 +56,9 @@ extension MediaPlayerClient: DependencyKey {
 			isEqualizerEnabled: {
 				await vlcActor.isEqualizerEnabled()
 			},
+			currentListEQ: {
+				await vlcActor.currentListEQ()
+			},
             setEnableEqualizer: { isEnabled, initialListEQ in
                 try await vlcActor.setEnableEqualizer(isEnabled, initialListEQ)
             },
@@ -64,7 +70,7 @@ extension MediaPlayerClient: DependencyKey {
             },
 			setEqualizerWith: { preset in
 				try await vlcActor.setEqualizerWith(preset)
-			},
+			}
         )
     }()
 }
