@@ -128,7 +128,16 @@ final private class VLCPlayer: NSObject, @unchecked Sendable {
 	
 	func setTrack(url: URL) async throws {
 		player.stop()
-		player.media = VLCMedia(url: url)
+		let media = VLCMedia(url: url)
+		media.addOptions([
+			"network-caching": 1500, 	// cache 1500ms (1.5 giây) trong RAM
+			"file-caching": 2000,    	// cache 2 giây cho file local
+			"live-caching": 3000,    	// cache 3 giây cho stream live
+			"tcp-caching": 1500,     	// TCP stream
+			"rtsp-caching": 3000, 		// RTSP stream
+			"http-reconnect": true,  	// tự động kết nối lại nếu mất kết nối
+		])
+		player.media = media
 		hasNotifiedDuration = false
 		player.play()
 		lastUpdateTime = .zero
